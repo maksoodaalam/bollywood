@@ -7,6 +7,14 @@
     "dialect": "mysql",
     "operatorsAliases": false
   },
+  "production": {
+    "username": "phpmyadmin",
+    "password": "aalam",
+    "database": "bollywood",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
   "test": {
     "username": "root",
     "password": "",
@@ -17,14 +25,5 @@
       "useUTC": false
     },
     "timezone": "+05:30"
-    
-  },
-  "production": {
-    "username": "root",
-    "password": "",
-    "database": "bollywood",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
-    "operatorsAliases": false
   }
 }
