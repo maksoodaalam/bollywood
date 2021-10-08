@@ -22,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     token: DataTypes.STRING,
-    otp: DataTypes.STRING
+    otp: DataTypes.STRING,
+    is_deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
   }, {
     tableName: 'users',
     timestamps: true

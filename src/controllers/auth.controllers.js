@@ -74,7 +74,7 @@ module.exports = {
       console.log(messages.SOMETHING_WRONG, error);
     }
   },
-
+  
   updateAccountAdmin: async (req, res) => {
     try {
       const result = await authServices.updateAccountAdmin(req.body);

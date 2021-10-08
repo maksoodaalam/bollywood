@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     name: DataTypes.STRING,
-    parent_category: DataTypes.STRING,
+    parent_category: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: ''
+    },
     slugs: DataTypes.STRING,
     descriptions: DataTypes.STRING,
     featured: DataTypes.STRING,

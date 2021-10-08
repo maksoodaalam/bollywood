@@ -1,6 +1,6 @@
 const express = require('express');
 const authRouter = express.Router();
-const { createAccount, login, updateAccount, updatePassword, updateAccountAdmin, forgotPassword, deleteAccount, verifyOtp, createOtp } = require('../controllers/auth.controllers');
+const { createAccount, login, updateAccount, updatePassword, updateAccountAdmin, forgotPassword, deleteAccount, verifyOtp, createOtp, masterData } = require('../controllers/auth.controllers');
 
 const validateResourceMW = require('../middlewares/users.middlewares');
 const validateToken = require('../middlewares/token.middleware');

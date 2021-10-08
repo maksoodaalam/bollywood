@@ -22,5 +22,19 @@
     "PASSWORD_DIFF": "Password should not be ",
     "PREV_PASS_DIFF": "Old password does not match",
     "PASS_CHANGED": "Your password updated",
-    "OLD_NEW_PASS": "New password cannot be the same as old password"
+    "OLD_NEW_PASS": "New password cannot be the same as old password",
+    "OTP_COULD_NOT_SENT": "Unable to send otp",
+    "CATEGORY_CREATED": "Category created",
+    "PRODUCT_CREATED": "Product added",
+    "PARENT_CAT_NOT_EXIST": "No parent category exist with given id",
+    "DUPLICATE_CAT_NAME": "A category with the same name already exist",
+    "DUPLICATE_PRODUCT_NAME": "A product with the same name already exist",
+    "DUPLICATE_KEY_NAME": "A key with the same name already exist",
+    "CATEGORY_NOT_EXIST_WITH_ID": "No category exist with given id",
+    "DATA_CREATED": "Data created",
+    "FETCHED_MASTER": "Master Data",
+    "All_PRODUCTS": "All products",
+    "CART_UPDATED": "Cart updated",
+    "PRODUCT_NOT_EXIST": "Product not exist for given id",
+    "CATEGORY_LIST": "Category list"
 }

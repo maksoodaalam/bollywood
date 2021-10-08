@@ -3,21 +3,20 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  const cart_table = sequelize.define('cart_table', {
+  const variation = sequelize.define('variation', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    user_id: DataTypes.STRING,
-    product_id: DataTypes.STRING,
-    quantity: DataTypes.STRING,
+    key: DataTypes.STRING,
+    json: DataTypes.JSON,
     is_deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
-    },
+    }
   }, {
-    tableName: 'cart',
+    tableName: 'variation',
     timestamps: true
   });
 
@@ -25,6 +24,6 @@ module.exports = (sequelize, DataTypes) => {
   //   groupTaskDiscription.belongsTo(models.groupTask, { foreignKey: 'taskId'})
   // };
 
-  // cart_table.sync({ force: true });
-  return cart_table;
+  // variation.sync({ force: true });
+  return variation;
 }

@@ -1,6 +1,6 @@
 const category = require('../dbServices/category.db.services');
 const ResponseData = require('../helper/responseData');
-const messages = require('../helper/messages.json');
+const msg = require('../helper/messages.json');
 
 module.exports = {
 
@@ -8,15 +8,13 @@ module.exports = {
     try {
       let msgDy;
       let actionStatus;
-      // console.log('the data we get', data);
-
+      
       const condition = { name: data.name };
 
       const ifExist = await category.findSingle(condition);
 
       if (ifExist) {
-        msgDy = "A category with the same name already exist";
-        actionStatus = false;
+        actionStatus = false; msgDy = msg.DUPLICATE_CAT_NAME;
       } else {
 
         if (data.parent_category !== undefined) {
@@ -24,16 +22,13 @@ module.exports = {
           const ifExist = await category.findSingle({ id: data.parent_category });
 
           if (ifExist) {
-            msgDy = "Category created";
-            actionStatus = true;
+            actionStatus = true; msgDy = msg.CATEGORY_CREATED;
             await category.create(data);
           } else {
-            msgDy = "No parent category exist with given id.";
-            actionStatus = false;
+            actionStatus = false; msgDy = msg.PARENT_CAT_NOT_EXIST;
           }
         } else {
-          msgDy = "Category created";
-          actionStatus = true;
+          actionStatus = true; msgDy = msg.CATEGORY_CREATED;
           await category.create(data);
         }
       }
@@ -46,75 +41,81 @@ module.exports = {
       });
 
     } catch (error) {
-      console.log(messages.SOMETHING_WRONG, error);
+      console.log(msg.SOMETHING_WRONG, error);
       return new ResponseData({
         status: 200,
         success: false,
         result: { data: null },
-        msg: messages.SOMETHING_WRONG,
+        msg: msg.SOMETHING_WRONG,
       });
     }
   },
 
   fetchCategory: async () => {
     try {
+      const condition = { parent_category: '' };
+      const masterCategories = await category.findAll(condition);
+      const allCatObj = await category.findAll(condition);
 
-      const allCategories = await category.findAll();
-      let allEntries = Object.entries(allCategories);
-      let all = {};
-      let allArray = [];
-      let allSubs = [];
-      let k = 0;
+      const blankObj = {};
 
-      await Promise.resolve()
-        .then(function () {
-          for (let i = 0; i < allCategories.length; i++) {
-            if (!allCategories[i].parent_category) {
-              all[k] = allCategories[i].dataValues;
-              allArray.push(allCategories[i].dataValues.id);
-              k++;
+      const promises = masterCategories.map(async (item, key) => {
+        const conditionSub = { parent_category: item.id };
+        const childOfCurrent = await category.findAll(conditionSub);
+        // console.log('childOfCurrent length', childOfCurrent);
+        if (childOfCurrent.length >= 1) {
+          const will = childOfCurrent.map(async (item, keyOne) => {
+            // console.log('more childs', item.id);
+
+            const thirdChild = await category.findAll({ parent_category: item.id });
+            if (thirdChild.length >= 1) {
+              thirdChild.map((thirdItem, thirdKey) => {
+                // console.log('third level child', thirdChild[thirdKey].dataValues.id + ' of ' + item.id);
+                item.dataValues[`sub_${thirdItem.name}`] = thirdItem;
+              });
+              // console.log(item.dataValues);
+            } else {
+              // console.log('this has no third level child');
+              item.dataValues['sub_category'] = null;
             }
-          }
-        }).then(() => {
-          for (let k = 0; k < allCategories.length; k++) {
-            for (let z = 0; z < allArray.length; z++) {
-              if (allCategories[k].parent_category == allArray[z]) {
-                // console.log('will see', z);
-                all[`${z}`][`sub_category_${z}`] = allCategories[k];
-                allSubs.push(allCategories[k]);
-              }
-            }
-          }
-        }).then(() => {
-          // for (let n = 0; n < allSubs.length; n++) {
-          //   if (allSubs[n].parent_category) {
-          //     for (let q = 0; q < allEntries.length; q++) {
-          //       if (allSubs[n].id == allEntries[q][1].dataValues.parent_category) {
-          //         // console.log('will see ', all[`${n}`].sub_category.dataValues);
-          //         all[`${n}`].sub_category.dataValues['sub_category'] = allCategories[q];
-          //       }
-          //     }
-          //   }
-          // }
-        });
 
+            allCatObj[key].dataValues[`sub_${item.name}`] = item;
 
+          });
 
-      return new ResponseData({
-        status: 200,
-        success: true,
-        result: { data: all },
-        msg: "All categories",
+          await Promise.all(will).then(() => { });
+
+        } else {
+          allCatObj[key].dataValues['sub_category'] = null;
+        }
+        if (masterCategories.length == key + 1) {
+          blankObj['data'] = allCatObj;
+        }
       });
+
+      // const willcheck = await category.findSingle({ parent_category: 13 });
+      // console.log('willcheck length', willcheck);
+
+      return await Promise.all(promises).then(() => {
+        // console.log('Map Opration Successfully Completed', blankObj);
+        return new ResponseData({
+          status: 200,
+          success: true,
+          result: { data: blankObj },
+          msg: "All categories",
+        });
+      })
+
+      // console.log('at end at once will start again', result);
 
 
     } catch (error) {
-      console.log(messages.SOMETHING_WRONG, error);
+      console.log(msg.SOMETHING_WRONG, error);
       return new ResponseData({
         status: 200,
         success: false,
         result: { data: null },
-        msg: messages.SOMETHING_WRONG,
+        msg: msg.SOMETHING_WRONG,
       });
     }
   }

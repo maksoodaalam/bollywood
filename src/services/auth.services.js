@@ -122,7 +122,6 @@ module.exports = {
       const otp = Math.floor(100000 + Math.random() * 900000);
       // console.log('random number', otp);
 
-      // const respond = smsClient.sendPartnerWelcomeMessage(createOtpPayload.contact_number, otp);
       // const randomOtp = new Random();
       // nextInt(999999);
 
@@ -132,12 +131,20 @@ module.exports = {
       let msgDy;
       let status;
       if (isExist) {
-        await users.update({ otp: otp }, condition);
-        status = true;
-        msgDy = messages.OTP_SENT;
+
+        const respond = await smsClient.sendPartnerWelcomeMessage(createOtpPayload.contact_number, otp);
+
+        // console.log('message api respond', respond);
+        if (respond.errors) {
+          console.log('message api error', respond.errors);
+          status = false; msgDy = messages.OTP_COULD_NOT_SENT;
+        } else {
+          await users.update({ otp: otp }, condition);
+          status = true; msgDy = messages.OTP_SENT;
+        }
+
       } else {
-        status = false;
-        msgDy = messages.CONTACT_USERNOTEXITS;
+        status = false; msgDy = messages.CONTACT_USERNOTEXITS;
       }
 
       return new ResponseData({
@@ -161,7 +168,7 @@ module.exports = {
   verifyOtp: async (data) => {
     try {
 
-      console.log('the data we get', data, data.contact_number, data.otp);
+      // console.log('the data we get', data, data.contact_number, data.otp);
       const condition = { contact_number: data.contact_number };
       const isExist = await users.findSingle(condition);
       let msgDy;
@@ -415,6 +422,5 @@ module.exports = {
         msg: messages.SOMETHING_WRONG,
       });
     }
-  },
-
+  }
 }

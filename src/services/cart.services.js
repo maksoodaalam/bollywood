@@ -1,4 +1,6 @@
 const cart = require('../dbServices/cart.db.services');
+const product = require('../dbServices/product.db.services');
+const user = require('../dbServices/users.db.services');
 const ResponseData = require('../helper/responseData');
 const messages = require('../helper/messages.json');
 const bcrypt = require('bcrypt');
@@ -10,36 +12,49 @@ module.exports = {
     try {
       console.log('the data we get', data);
 
-      const condition = { user_id: data.user_id };
       let msgDy;
       let actionStatus;
-      let dataDy = null;
-      const ifExist = await cart.findSingle(condition);
+      const ifExist = await user.findSingle({ id: data.user_id });
 
       if (ifExist) {
-        const condition2 = { product_id: data.product_id };
-        const ifProductExist = await cart.findSingle(condition2);
+
+        const ifProductExist = await product.findSingle({ id: data.product_id });
+        console.log('ifProductExist', ifProductExist);
         if (ifProductExist) {
-          const toUpdate = { quantity: data.quantity };
-          await cart.update(toUpdate, { product_id: data.product_id });
-          actionStatus = true;
-          msgDy = "Cart Updated";
+
+
+
+          const ifProductExist = await cart.findSingle({ product_id: data.product_id });
+
+          if (ifProductExist) {
+            const toUpdate = { quantity: data.quantity };
+            await cart.update(toUpdate, { product_id: data.product_id });
+            actionStatus = true; msgDy = messages.CART_UPDATED;
+          } else {
+            // console.log('product not exist');
+            await cart.create(data);
+            actionStatus = true; msgDy = messages.CART_UPDATED;
+          }
+
+
+
         } else {
-          // console.log('product not exist');
-          await cart.create(data);
-          actionStatus = true;
-          msgDy = "Cart Updated";
+
+          actionStatus = false; msgDy = messages.PRODUCT_NOT_EXIST;
         }
+
+
+
+
+
       } else {
-        await cart.create(data);
-        actionStatus = true;
-        msgDy = "Cart Updated";
+        actionStatus = false; msgDy = messages.ACCOUNT_NOT_EXIST;
       }
 
       return new ResponseData({
         status: 200,
         success: actionStatus,
-        result: { data: dataDy },
+        result: { data: null },
         msg: msgDy,
       });
 
@@ -98,9 +113,9 @@ module.exports = {
 
       const ifExist = await cart.findSingle(data);
 
-      if(ifExist){
-        
-      }else{
+      if (ifExist) {
+
+      } else {
 
       }
 
