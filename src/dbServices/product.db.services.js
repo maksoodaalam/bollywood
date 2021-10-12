@@ -1,4 +1,4 @@
-const { products } = require('../models');
+const { products, gallery, product_details } = require('../models');
 
 module.exports = {
 
@@ -20,6 +20,22 @@ module.exports = {
 
   delete: async (condition) => {
     return await products.destroy({ where: condition });
-  }
+  },
+
+  getProduct: async (condition={}) => {
+    return await products.findAll({ 
+      where: condition,
+      include: [
+        {
+          model: gallery,
+          required: false
+        },
+        {
+          model: product_details,
+          required: false
+        }
+      ] 
+    })
+  },
 
 }

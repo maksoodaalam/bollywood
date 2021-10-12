@@ -1,4 +1,4 @@
-const { variation } = require('../models');
+const { variation, variationOption } = require('../models');
 
 module.exports = {
 
@@ -20,6 +20,18 @@ module.exports = {
 
   delete: async (condition) => {
     return await variation.destroy({ where: condition });
-  }
+  },
+
+  findVariation: async (condition={}) => {
+    return await variation.findAll({ 
+      where: condition,
+      include: [
+        {
+          model: variationOption,
+          required: false
+        }
+      ] 
+    })
+  },
 
 }

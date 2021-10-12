@@ -1,4 +1,4 @@
-const master = require('../dbServices/variations.db.services');
+const master = require('../dbServices/master.db.services');
 const ResponseData = require('../helper/responseData');
 const msg = require('../helper/messages.json');
 

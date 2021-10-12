@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     parent_category: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: 0
     },
     slugs: DataTypes.STRING,
     descriptions: DataTypes.STRING,

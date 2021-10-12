@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    product_id: DataTypes.STRING,
-    category_id: DataTypes.STRING
+    product_id: DataTypes.INTEGER,
+    category_id: DataTypes.INTEGER
   }, {
     tableName: 'product_category',
     timestamps: true

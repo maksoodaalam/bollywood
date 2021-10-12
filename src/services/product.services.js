@@ -1,5 +1,7 @@
 const product = require('../dbServices/product.db.services');
 const category = require('../dbServices/category.db.services');
+const gallery = require('../dbServices/gallery.db.services');
+const productDetails = require('../dbServices/product_detail.db.services');
 const categoryAndProduct = require('../dbServices/product_category.db.services');
 const ResponseData = require('../helper/responseData');
 const MSG = require('../helper/messages.json');
@@ -10,8 +12,6 @@ module.exports = {
     try {
       let msgDy;
       let actionStatus;
-
-      // console.log('got here', data.categoryId);
 
       const ifExist = await product.findSingle({ productname: data.productname });
 
@@ -32,7 +32,29 @@ module.exports = {
         await Promise.all(promises).then(() => { });
 
         if (ifExist) {
+
           const created = await product.create(data);
+
+          const galleryJson = {
+            relation_id: created.id,
+            url: data.featuredimg,
+            is_featured: true
+          }
+
+          await gallery.create(galleryJson);
+
+          const productDetailGalleryJson = {
+            url: data.featuredimg,
+            is_featured: false
+          }
+
+          const productDetailGallry = await gallery.create(productDetailGalleryJson);
+
+          // const maxId = await gallery.findMax();
+          // const maxIdNumber = Object.entries(maxId[0])[0][1];
+          // console.log('i will see', maxIdNumber);
+
+          await productDetails.create({ product_id: created.id, image: productDetailGallry.id });
 
           const promisesTwo = data.categoryId.map(async (item, val) => {
             const ifCategoryExist = await category.findSingle({ id: parseInt(item) });
@@ -84,7 +106,7 @@ module.exports = {
   getProduct: async () => {
     try {
 
-      const products = await product.findAll({});
+      const products = await product.getProduct({});
 
       return new ResponseData({
         status: 200,
@@ -104,25 +126,41 @@ module.exports = {
     }
   },
 
-  getProductById: async (data) => {
+  addProductDetail: async (data) => {
     try {
       let msgDy;
       let actionStatus;
-      // console.log('will see', data.id);
-      const catId = parseInt(data.id); 
-      // console.log('will see', catId);
-      const products = await categoryAndProduct.findProductWithCategory({ category_id: catId });
-      // console.log('will see', products.length);
-      if(products.length > 0){
-        actionStatus = true; msgDy = MSG.CATEGORY_LIST;
-      }else{
-        actionStatus = false; msgDy = MSG.CATEGORY_NOT_EXIST_WITH_ID;
+
+      const ifExist = await product.findSingle({ id: data.product_id });
+
+      if (ifExist) {
+
+        const ifUnique = await productDetails.findSingle({ skucode: data.skucode });
+
+        if (!ifUnique) {
+
+          const created = await productDetails.create(data);
+          if(created){
+            actionStatus = true; msgDy = MSG.DETAIL_ADDED;
+          }else{
+            actionStatus = true; msgDy = MSG.SOMETHING_WRONG;
+          }
+
+        } else {
+          actionStatus = false; msgDy = MSG.SKU_CODE_EXIST;
+        }
+
+
+      } else {
+        actionStatus = false; msgDy = MSG.PRODUCT_NOT_EXIST;
       }
+
+      console.log('got here', data);
 
       return new ResponseData({
         status: 200,
         success: actionStatus,
-        result: { data: products },
+        result: { data: "products" },
         msg: msgDy,
       });
 

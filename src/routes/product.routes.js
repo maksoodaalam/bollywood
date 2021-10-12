@@ -1,6 +1,6 @@
 const express = require('express');
 const cartRouter = express.Router();
-const { addProduct, getProduct, getProductById } = require('../controllers/product.controllers');
+const { addProduct, getProduct, getProductById, addProductDetail } = require('../controllers/product.controllers');
 
 const validateResourceMW = require('../middlewares/users.middlewares');
 const paramsValidations = require('../middlewares/users.middlewares.params');
@@ -17,5 +17,9 @@ cartRouter.get('/get-products',
 cartRouter.get('/get-products-by-id',
   paramsValidations(productSchema.getProductById),
   getProductById);
+
+cartRouter.post('/add-product-details',
+  // paramsValidations(productSchema.addProductDetails),
+  addProductDetail);
 
 module.exports = cartRouter;

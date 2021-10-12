@@ -37,12 +37,6 @@ module.exports = (sequelize, DataTypes) => {
         producttype: {
             type: Sequelize.STRING
         },
-        featuredimg: {
-            type: Sequelize.STRING
-        },
-        gallary: {
-            type: Sequelize.STRING
-        },
         categoryId: {
             type: Sequelize.INTEGER
         },
@@ -63,6 +57,8 @@ module.exports = (sequelize, DataTypes) => {
 
     products.associate = function (models) {
         products.belongsTo(models.product_category, { foreignKey: 'id' });
+        products.hasMany(models.gallery, { foreignKey: 'relation_id', sourceKey: 'id' });
+        products.hasMany(models.product_details, { foreignKey: 'product_id', sourceKey: 'id' });
     }
 
     // products.sync({ force: true });

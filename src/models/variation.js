@@ -9,8 +9,13 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    key: DataTypes.STRING,
-    json: DataTypes.JSON,
+    attribute: DataTypes.STRING,
+    createdBy: DataTypes.INTEGER,
+    modifiedBy: DataTypes.INTEGER,
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
     is_deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -20,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
-  // users.associate = function (models) {
-  //   groupTaskDiscription.belongsTo(models.groupTask, { foreignKey: 'taskId'})
-  // };
+  variation.associate = function (models) {
+    variation.hasMany(models.variationOption, { foreignKey: 'attribute_id', sourceKey: 'id'})
+  };
 
   // variation.sync({ force: true });
   return variation;

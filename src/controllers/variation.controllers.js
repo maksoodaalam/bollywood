@@ -1,39 +1,38 @@
-const productServices = require('../services/product.services');
+const variationServices = require('../services/variation.services');
 const messages = require('../helper/messages.json');
 
 module.exports = {
 
-  addProduct: async (req, res) => {
+  addAttribute: async (req, res) => {
     try {
-      const result = await productServices.addProduct(req.body);
+      const result = await variationServices.addAttribute(req.body);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
     }
   },
 
-  getProduct: async (req, res) => {
+  getAllAttribute: async (req, res) => {
     try {
-      const result = await productServices.getProduct();
+      const result = await variationServices.getAllAttribute();
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
     }
   },
 
-
-  getProductById: async (req, res) => {
+  addVariation: async (req, res) => {
     try {
-      const result = await productServices.getProductById(req.query);
+      const result = await variationServices.addVariation(req.body);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
     }
   },
 
-  addProductDetail: async (req, res) => {
+  getVariationWithAttribute: async (req, res) => {
     try {
-      const result = await productServices.addProductDetail(req.body);
+      const result = await variationServices.getVariationWithAttribute();
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);

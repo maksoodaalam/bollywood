@@ -24,9 +24,7 @@ module.exports = {
         if (isValidatePassword) {
 
           const tokenData = {
-            id: emailExist.id,
-            email: emailExist.email,
-            password: emailExist.password
+            id: emailExist.id
           };
 
           let userData;

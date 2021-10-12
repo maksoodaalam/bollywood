@@ -4,7 +4,7 @@ module.exports = {
 
   addCategory: yup.object({
     name: yup.string().required(),
-    parent_category: yup.number(),
+    parent_category: yup.number().required().positive().integer(),
     slugs: yup.string(),
     descriptions: yup.string(),
     featured: yup.string(),

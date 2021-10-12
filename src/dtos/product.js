@@ -23,4 +23,8 @@ module.exports = {
     id: yup.number().required().positive().integer(),
   }),
 
+  addProductDetails: yup.object({
+    product_id: yup.number().required().positive().integer(),
+  }),
+
 }

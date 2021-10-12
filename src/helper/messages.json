@@ -36,5 +36,15 @@
     "All_PRODUCTS": "All products",
     "CART_UPDATED": "Cart updated",
     "PRODUCT_NOT_EXIST": "Product not exist for given id",
-    "CATEGORY_LIST": "Category list"
+    "CATEGORY_LIST": "Category list",
+    "ATTRIBUTE_NAME_EXIST": "An attribute with this name already exist",
+    "ATTRIBUTE_CREATED": "Attribute created",
+    "ALL_ATTRIBUTE": "All attribute",
+    "VARIATION_NAME_EXIST": "An variation with this name already exist",
+    "VARIATION_CREATED": "Variation created",
+    "NO_VARIATION_EXIST_WITH_ID": "No variation exist with this id",
+    "ALL_VARIATION_AND_ATTRIBUTE": "All variation and attribute",
+    "SKU_CODE_EXIST": "SKU code already exist",
+    "DETAIL_ADDED": "Product detail added"
+
 }

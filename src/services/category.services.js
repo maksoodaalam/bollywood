@@ -17,7 +17,7 @@ module.exports = {
         actionStatus = false; msgDy = msg.DUPLICATE_CAT_NAME;
       } else {
 
-        if (data.parent_category !== undefined) {
+        if (data.parent_category !== 0) {
 
           const ifExist = await category.findSingle({ id: data.parent_category });
 
@@ -53,7 +53,7 @@ module.exports = {
 
   fetchCategory: async () => {
     try {
-      const condition = { parent_category: '' };
+      const condition = { parent_category: 0 };
       const masterCategories = await category.findAll(condition);
       const allCatObj = await category.findAll(condition);
 

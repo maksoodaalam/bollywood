@@ -15,9 +15,7 @@ module.exports = {
   },
 
   generateToken: async (data) => {
-    return await jwt.sign(data, tokenSecret, "Stack", {
-      expiresIn: "10h"
-    });
+    return await jwt.sign(data, tokenSecret);
   },
 
   ////razorpay
