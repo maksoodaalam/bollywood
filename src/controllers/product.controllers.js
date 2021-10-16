@@ -40,4 +40,25 @@ module.exports = {
     }
   },
 
+  getProductByCatagoryId: async(req, res) =>{
+    try {
+      const result = await productServices.getProductByCatagoryId(req.query);
+      res.json(result);
+    } catch (error) {
+      console.log(messages.SOMETHING_WRONG, error);
+    }
+  },
+
+  getProductByPriceRange: async(req, res) =>{
+    let priceFrom = req.query.priceFrom;
+    let priceTo = req.query.priceTo;
+    try {
+      const result = await productServices.getProductByPriceRange(priceFrom,priceTo);
+      res.json(result);
+    } catch (error) {
+      console.log(messages.SOMETHING_WRONG, error);
+    }
+  },
+   
+
 }
