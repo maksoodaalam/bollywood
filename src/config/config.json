@@ -1,0 +1,29 @@
+{
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "bollywood",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "phpmyadmin",
+    "password": "aalam",
+    "database": "bollywood",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "root",
+    "password": "root",
+    "database": "bollywood",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "useUTC": false
+    },
+    "timezone": "+05:30"
+  }
+}
