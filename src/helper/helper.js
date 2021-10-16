@@ -26,6 +26,10 @@ module.exports = {
     })
   },
 
+  secretkey: () => {
+    return tokenSecret;
+  },
+
   createPaginationData: (totalRecords, page, size) => {
 
     if (totalRecords !== 0 && page !== 0 && size !== 0) {

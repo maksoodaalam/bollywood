@@ -10,8 +10,7 @@ module.exports = {
 
   addProduct: async (data) => {
     try {
-      let msgDy;
-      let actionStatus;
+      let msgDy, actionStatus;
 
       const ifExist = await product.findSingle({ productname: data.productname });
 
@@ -128,8 +127,7 @@ module.exports = {
 
   addProductDetail: async (data) => {
     try {
-      let msgDy;
-      let actionStatus;
+      let msgDy, actionStatus;
 
       const ifExist = await product.findSingle({ id: data.product_id });
 

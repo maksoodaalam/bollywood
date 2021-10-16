@@ -23,7 +23,7 @@ module.exports = {
 
   createOtp: async (req, res) => {
     try {
-      const result = await authServices.createOtp(req.body);
+      const result = await authServices.createOtp(req.user);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
@@ -32,7 +32,7 @@ module.exports = {
 
   verifyOtp: async (req, res) => {
     try {
-      const result = await authServices.verifyOtp(req.body);
+      const result = await authServices.verifyOtp(req.user);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
@@ -41,7 +41,7 @@ module.exports = {
 
   updateAccount: async (req, res) => {
     try {
-      const result = await authServices.updateAccountService(req.body);
+      const result = await authServices.updateAccountService(req.body, req.user);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
@@ -59,7 +59,7 @@ module.exports = {
 
   updatePassword: async (req, res) => {
     try {
-      const result = await authServices.updatePassword(req.body);
+      const result = await authServices.updatePassword(req.body, req.user);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
@@ -68,7 +68,7 @@ module.exports = {
   
   forgotPassword: async (req, res) => {
     try {
-      const result = await authServices.forgotPassword(req.body);
+      const result = await authServices.forgotPassword(req.body, req.user);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);

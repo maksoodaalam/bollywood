@@ -1,29 +1,65 @@
 const jwt = require('jsonwebtoken');
+const MSG = require('../helper/messages.json');
+const authServices = require('../services/auth.services');
+const { secretkey } = require('../helper/helper');
+
+
 const validateToken = () => async (req, res, next) => {
-  // console.log('resourcesresourcesresources', req.headers);
   const resources = req.headers;
-  // next();
   try {
-    let errorMsg;
-    // await resourceSchema.validate(resource);
     if (resources) {
       if (resources.token) {
-        next();
+        // next();
         // jwt.verify();
+        const secretKey = await secretkey();
+        // console.log('will se', secretKey + ' tokne ', resources.token);
+
+        try {
+
+          const verificationResponse = await jwt.verify(resources.token, secretKey);
+          // console.log('verificationResponse,', verificationResponse, verificationResponse.id);
+
+          const user = await authServices.findUserById(verificationResponse.id);
+          // console.log('user,', user);
+
+          if (user) {
+            // console.log('went through all this,', user);
+            req.user = user;
+            next();
+          } else {
+            res.status(400).json({
+              status: 400,
+              success: false,
+              result: { data: null },
+              msg: MSG.TOKEN_INCORRETCT,
+            });
+          }
+
+
+        } catch (error) {
+          res.status(400).json({
+            status: 400,
+            success: false,
+            result: { data: null },
+            msg: MSG.TOKEN_INCORRETCT,
+          });
+        }
+
+
       } else {
         res.status(400).json({
-          status: 200,
+          status: 400,
           success: false,
           result: { data: null },
-          msg: "You must have to pass token in headers",
+          msg: MSG.TOKEN_REQUIRED,
         });
       }
     } else {
       res.status(400).json({
-        status: 200,
+        status: 400,
         success: false,
         result: { data: null },
-        msg: "You must have to pass headers",
+        msg: MSG.HEADERS_REQUIRED,
       });
     }
 
@@ -31,10 +67,10 @@ const validateToken = () => async (req, res, next) => {
     console.error(error);
 
     res.status(400).json({
-      status: 200,
+      status: 400,
       success: false,
       result: { data: null },
-      msg: e.errors.join(', '),
+      msg: MSG.TOKEN_INCORRETCT,
     });
   }
 };

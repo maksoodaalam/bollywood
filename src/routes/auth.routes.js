@@ -11,16 +11,15 @@ authRouter.post('/create-account',
   createAccount);
 
 authRouter.post('/create-otp',
-  validateResourceMW(userSchema.createOtp),
+  validateToken(),
   createOtp);
 
 authRouter.post('/verify-otp',
-  validateResourceMW(userSchema.verifyOtp),
+  validateToken(),
   verifyOtp);
 
 authRouter.post('/login',
   validateResourceMW(userSchema.login),
-  // validateToken(),
   login);
 
 authRouter.put('/update-admin',
@@ -29,14 +28,17 @@ authRouter.put('/update-admin',
 
 authRouter.put('/update',
   validateResourceMW(userSchema.update),
+  validateToken(),
   updateAccount);
 
 authRouter.put('/update-password',
   validateResourceMW(userSchema.updatePassword),
+  validateToken(),
   updatePassword);
 
 authRouter.post('/forgot-password',
   validateResourceMW(userSchema.forgotPassword),
+  validateToken(),
   forgotPassword);
 
 authRouter.delete('/delete',

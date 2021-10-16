@@ -45,6 +45,10 @@
     "NO_VARIATION_EXIST_WITH_ID": "No variation exist with this id",
     "ALL_VARIATION_AND_ATTRIBUTE": "All variation and attribute",
     "SKU_CODE_EXIST": "SKU code already exist",
-    "DETAIL_ADDED": "Product detail added"
+    "DETAIL_ADDED": "Product detail added",
+    "HEADERS_REQUIRED": "You must have to pass headers",
+    "TOKEN_REQUIRED": "You must have to pass token in headers",
+    "TOKEN_INCORRETCT": "Unauthorized token"
+    
 
 }

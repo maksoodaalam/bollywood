@@ -14,7 +14,7 @@ module.exports = {
     producttype: yup.string().required(),
     featuredimg: yup.string().required(),
     gallary: yup.number(),
-    categoryId: yup.array().of(yup.number().positive().integer()),
+    categoryId: yup.array().of(yup.number().positive().integer()).required(),
     createdby: yup.string(),
     modifiedby: yup.string(),
   }),

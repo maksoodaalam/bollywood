@@ -24,22 +24,16 @@ module.exports = {
         if (isValidatePassword) {
 
           const tokenData = {
-            id: emailExist.id
+            id: emailExist.id,
+            email: emailExist.email
           };
 
-          let userData;
-          if (emailExist.status == true) {
-            const token = await generateToken(tokenData);
-            await users.update({ token: token }, condition);
-            userData = await users.findSingle(condition);
-          } else {
-            await users.update({ token: null }, condition);
-            userData = await users.findSingle(condition);
-          }
+          const token = await generateToken(tokenData);
 
           actionStatus = true;
-          dataDy = userData;
-          msgDy = messages.LOGGED_IN.replace('%type%', userData.name);
+          emailExist.password = null;
+          dataDy = { userData: emailExist, token: token };
+          msgDy = messages.LOGGED_IN.replace('%type%', emailExist.name);
         } else {
           actionStatus = false;
           dataDy = null;
@@ -116,7 +110,7 @@ module.exports = {
 
   createOtp: async (createOtpPayload) => {
     try {
-
+      console.log("createOtpPayload", createOtpPayload);
       const otp = Math.floor(100000 + Math.random() * 900000);
       // console.log('random number', otp);
 
@@ -250,33 +244,15 @@ module.exports = {
     }
   },
 
-  updateAccountService: async (updateData) => {
+  updateAccountService: async (updateData, user) => {
     try {
-      let condition;
-      let msg;
-      let actionStatus;
-      if (updateData.id) {
-        condition = { id: updateData.id };
-      } else if (updateData.email) {
-        condition = { email: updateData.email };
-      } else if (updateData.contact_number) {
-        condition = { contact_number: updateData.contact_number };
-      }
-      if (condition !== undefined) {
+      let condition, msg, actionStatus;
+      condition = { id: user.id };
+      
+      const updateBool = await users.update({ name: updateData.name }, condition);
 
-        const isExist = await users.findSingle(condition);
-        if (isExist) {
-          const updateBool = await users.update({ name: updateData.name }, condition);
-          actionStatus = true;
-          msg = messages.UPDATED_ACCOUNT;
-        } else {
-          actionStatus = false;
-          msg = messages.ACCOUNT_NOT_EXIST;
-        }
-      } else {
-        actionStatus = false;
-        msg = messages.REQUIRED_FIELDS;
-      }
+      actionStatus = true; msg = messages.UPDATED_ACCOUNT;
+
       return new ResponseData({
         status: 200,
         success: actionStatus,
@@ -339,14 +315,14 @@ module.exports = {
     }
   },
 
-  updatePassword: async (data) => {
+  updatePassword: async (data, user) => {
     try {
       let messageDy;
       let actionStatus;
 
       // console.log('update password', data);
 
-      const condition = { id: data.user_id };
+      const condition = { id: user.id };
       const isExist = await users.findSingle(condition);
       if (data.old_password !== data.password) {
         if (isExist) {
@@ -387,12 +363,12 @@ module.exports = {
     }
   },
 
-  forgotPassword: async (data) => {
+  forgotPassword: async (data, user) => {
     try {
       let messageDy;
       let actionStatus;
 
-      const condition = { contact_number: data.contact_number };
+      const condition = { contact_number: user.contact_number };
       const isExist = await users.findSingle(condition);
       if (isExist) {
         const hashedPassword = await generatePasswordHash(data.password);
@@ -420,5 +396,20 @@ module.exports = {
         msg: messages.SOMETHING_WRONG,
       });
     }
+  },
+
+  findUserById: async (id) => {
+    try {
+      const isExist = await users.findSingle({ id: id });
+      return isExist;
+    } catch (error) {
+      return new ResponseData({
+        status: 200,
+        success: false,
+        result: { data: null },
+        msg: messages.SOMETHING_WRONG,
+      });
+    }
   }
+
 }

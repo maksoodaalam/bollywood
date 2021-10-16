@@ -17,7 +17,7 @@ module.exports = {
   }),
 
   update: yup.object({
-    id: yup.number(),
+    id: yup.number().positive().integer(),
     name: yup.string().min(5).max(30),
     email: yup.string().email().max(50),
     password: yup.string().min(5).max(30),
@@ -27,7 +27,7 @@ module.exports = {
   }),
 
   delete: yup.object({
-    id: yup.number(),
+    id: yup.number().positive().integer(),
     email: yup.string().email().max(50),
     contact_number: yup.number(),
   }),
@@ -42,13 +42,11 @@ module.exports = {
   }),
   
   updatePassword: yup.object({
-    user_id: yup.number().required(),
     old_password: yup.string().min(5).max(30).required(),
     password: yup.string().min(5).max(30).required(),
   }),
 
   forgotPassword: yup.object({
-    contact_number: yup.number().required(),
     password: yup.string().min(5).max(30).required(),
   }),
   

@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    token: DataTypes.STRING,
     otp: DataTypes.STRING,
     is_deleted: {
       type: DataTypes.BOOLEAN,
