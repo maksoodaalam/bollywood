@@ -14,17 +14,17 @@ module.exports = {
     producttype: yup.string().required(),
     featuredimg: yup.string().required(),
     gallary: yup.number(),
-    categoryId: yup.array().of(yup.number().positive().integer()).required(),
+    categoryId: yup.array().of(yup.number().positive()).required(),
     createdby: yup.string(),
     modifiedby: yup.string(),
   }),
 
   getProductById: yup.object({
-    id: yup.number().required().positive().integer(),
+    id: yup.number().required().positive(),
   }),
 
   addProductDetails: yup.object({
-    product_id: yup.number().required().positive().integer(),
+    product_id: yup.number().required().positive(),
   }),
 
 }

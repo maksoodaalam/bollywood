@@ -4,6 +4,7 @@ const category = require('./routes/category.routes');
 const product = require('./routes/product.routes');
 const master = require('./routes/master.routes');
 const variation = require('./routes/variation.routes');
+const upload = require('./routes/upload.routes');
 
 
 const routes = [
@@ -12,7 +13,8 @@ const routes = [
   ['/api/v1/category', category],
   ['/api/v1/product', product],
   ['/api/v1/master', master],
-  ['/api/v1/variation', variation]
+  ['/api/v1/variation', variation],
+  ['/api/v1/upload', upload]
 ];
 
 

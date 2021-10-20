@@ -1,5 +1,6 @@
 const validateResourceMW = (resourceSchema) => async (req, res, next) => {
   const resource = req.body;
+  console.log('will see', req);
   try {
     // throws an error if not valid
     await resourceSchema.validate(resource);

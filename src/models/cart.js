@@ -9,9 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    user_id: DataTypes.STRING,
-    product_id: DataTypes.STRING,
-    quantity: DataTypes.STRING,
+    user_id: DataTypes.INTEGER,
+    product_id: DataTypes.INTEGER,
+    product_varient_id: DataTypes.INTEGER,
+    quantity: DataTypes.INTEGER,
     is_deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -21,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
-  // users.associate = function (models) {
-  //   groupTaskDiscription.belongsTo(models.groupTask, { foreignKey: 'taskId'})
-  // };
+  cart_table.associate = function (models) {
+    cart_table.hasMany(models.product_details, { foreignKey: 'id', sourceKey: 'product_varient_id' })
+  };
 
   // cart_table.sync({ force: true });
   return cart_table;

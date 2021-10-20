@@ -5,7 +5,7 @@ module.exports = {
 
   addToCart: async (req, res) => {
     try {
-      const result = await cartServices.addToCart(req.body);
+      const result = await cartServices.addToCart(req.body, req.user);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);
@@ -14,7 +14,7 @@ module.exports = {
 
   fetchCartItem: async (req, res) => {
     try {
-      const result = await cartServices.fetchCartItem(req.query);
+      const result = await cartServices.fetchCartItem(req.user);
       res.json(result);
     } catch (error) {
       console.log(messages.SOMETHING_WRONG, error);

@@ -138,9 +138,9 @@ module.exports = {
         if (!ifUnique) {
 
           const created = await productDetails.create(data);
-          if(created){
+          if (created) {
             actionStatus = true; msgDy = MSG.DETAIL_ADDED;
-          }else{
+          } else {
             actionStatus = true; msgDy = MSG.SOMETHING_WRONG;
           }
 
@@ -172,5 +172,28 @@ module.exports = {
       });
     }
   },
+
+  getProductFilter: async (catagoryId) => {
+    try {
+      console.log('query ', catagoryId);
+      const products = await product.getProductFilter(catagoryId);
+
+      return new ResponseData({
+        status: 200,
+        success: true,
+        result: { data: products },
+        msg: MSG.All_PRODUCTS,
+      });
+
+    } catch (error) {
+      console.log(MSG.SOMETHING_WRONG, error);
+      return new ResponseData({
+        status: 200,
+        success: false,
+        result: { data: null },
+        msg: MSG.SOMETHING_WRONG,
+      });
+    }
+  }
 
 }

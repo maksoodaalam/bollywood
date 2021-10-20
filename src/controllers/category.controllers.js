@@ -3,7 +3,7 @@ const messages = require('../helper/messages.json');
 
 module.exports = {
 
-  addCategory: async (req, res) => {
+  addCategory: async (req, res, file) => {
     try {
       const result = await categoryServices.addToCategory(req.body);
       res.json(result);

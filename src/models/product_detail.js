@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
 
   product_details.associate = function (models) {
     product_details.belongsTo(models.products, { foreignKey: 'id', sourceKey: 'product_id' });
+    product_details.belongsTo(models.cart_table, { foreignKey: 'id', sourceKey: 'id' });
   };
 
   // product_details.sync({ force: true });

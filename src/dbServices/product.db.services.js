@@ -1,4 +1,6 @@
 const { products, gallery, product_details } = require('../models');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
 
@@ -22,8 +24,8 @@ module.exports = {
     return await products.destroy({ where: condition });
   },
 
-  getProduct: async (condition={}) => {
-    return await products.findAll({ 
+  getProduct: async (condition = {}) => {
+    return await products.findAll({
       where: condition,
       include: [
         {
@@ -34,8 +36,36 @@ module.exports = {
           model: product_details,
           required: false
         }
-      ] 
+      ]
     })
   },
+
+  getProductFilter: async (condition = {}) => {
+
+
+    return await products.findAll({
+
+      where: {
+        categoryId: {
+          [Op.or]: [3]
+        }
+      },
+      include: [
+        {
+          model: gallery,
+          required: false
+        },
+        {
+          model: product_details,
+          where: {
+            mrp: {
+              [Op.between]: [0, 1100]
+            }
+          }
+        }
+      ]
+    });
+  }
+
 
 }

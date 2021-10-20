@@ -40,4 +40,17 @@ module.exports = {
     }
   },
 
+  getProductFilter: async (req, res) => {
+    // const categoryId = req.query.categoryId;
+    // const priceFrom = req.query.priceFrom;
+    // const priceTo = req.query.priceTo;
+    // console.log(categoryId,priceFrom,priceTo);
+    try {
+      const result = await productServices.getProductFilter(req.query);
+      res.json(result);
+    } catch (error) {
+      console.log(messages.SOMETHING_WRONG, error);
+    }
+  },
+
 }

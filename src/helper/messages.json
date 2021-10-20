@@ -48,7 +48,15 @@
     "DETAIL_ADDED": "Product detail added",
     "HEADERS_REQUIRED": "You must have to pass headers",
     "TOKEN_REQUIRED": "You must have to pass token in headers",
-    "TOKEN_INCORRETCT": "Unauthorized token"
+    "TOKEN_INCORRETCT": "Unauthorized token",
+    "PRODUCT_VARIENT_NOT_EXIST": "Product varient not exist for given id",
+    "PRODUCTS_IN_CART": "Products in cart",
+    "QUANTITY_ACCEED" : "Maximum available quantity is %type%.",
+    "ITEMS_IN_CART": "List of cart items",
+    "RENAME_FILE_ERROR": "Something went wrong while changing filename",
+    "UPLOAD_FILE_ERROR": "Something went wrong while uploading file",
+    "UPLOAD_FILE_SUCCESS": "File uploaded",
+    "MOVE_ERROR": "Something went wrong while moving file"
     
 
 }

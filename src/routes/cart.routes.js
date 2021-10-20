@@ -9,10 +9,11 @@ const cartSchema = require('../dtos/cart');
 
 cartRouter.post('/update-cart',
   validateResourceMW(cartSchema.addToCart),
+  validateToken(),
   addToCart);
 
 cartRouter.get('/fetch-cart-item',
-  paramsValidations(cartSchema.fetchCartItem),
+  validateToken(),
   fetchCartItem);
 
 cartRouter.delete('/delete-cart-item',

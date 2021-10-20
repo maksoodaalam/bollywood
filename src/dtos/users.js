@@ -17,7 +17,7 @@ module.exports = {
   }),
 
   update: yup.object({
-    id: yup.number().positive().integer(),
+    id: yup.number().positive(),
     name: yup.string().min(5).max(30),
     email: yup.string().email().max(50),
     password: yup.string().min(5).max(30),
@@ -27,7 +27,7 @@ module.exports = {
   }),
 
   delete: yup.object({
-    id: yup.number().positive().integer(),
+    id: yup.number().positive(),
     email: yup.string().email().max(50),
     contact_number: yup.number(),
   }),

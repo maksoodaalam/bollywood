@@ -1,92 +1,66 @@
 const cart = require('../dbServices/cart.db.services');
 const product = require('../dbServices/product.db.services');
+const product_detail = require('../dbServices/product_detail.db.services');
 const user = require('../dbServices/users.db.services');
 const ResponseData = require('../helper/responseData');
-const messages = require('../helper/messages.json');
+const MSG = require('../helper/messages.json');
 const bcrypt = require('bcrypt');
 const { isEmpty } = require('lodash');
 
 module.exports = {
 
-  addToCart: async (data) => {
+  addToCart: async (data, user) => {
     try {
-      console.log('the data we get', data);
 
-      let msgDy;
-      let actionStatus;
-      const ifExist = await user.findSingle({ id: data.user_id });
+      let msgDy, actionStatus, dataDy;
 
-      if (ifExist) {
+      const ifProductExist = await product.findSingle({ id: data.product_id });
+      if (ifProductExist) {
+        const details = await product_detail.findSingle({ id: data.product_varient_id });
+        if (details) {
 
-        const ifProductExist = await product.findSingle({ id: data.product_id });
-        console.log('ifProductExist', ifProductExist);
-        if (ifProductExist) {
+          console.log('the data we get', details.quantity, data.quantity);
 
-
-
-          const ifProductExist = await cart.findSingle({ product_id: data.product_id });
-
-          if (ifProductExist) {
-            const toUpdate = { quantity: data.quantity };
-            await cart.update(toUpdate, { product_id: data.product_id });
-            actionStatus = true; msgDy = messages.CART_UPDATED;
+          if (data.quantity > details.quantity) {
+            actionStatus = false; dataDy = null; msgDy = MSG.QUANTITY_ACCEED.replace('%type%', details.quantity);
           } else {
-            // console.log('product not exist');
-            await cart.create(data);
-            actionStatus = true; msgDy = messages.CART_UPDATED;
+
+            // const product_details = [details];
+            // ifProductExist.dataValues.product_details = product_details;
+            // actionStatus = true; dataDy = ifProductExist; msgDy = MSG.PRODUCTS_IN_CART;
+
+            const condition = {
+              product_id: data.product_id,
+              product_varient_id: data.product_varient_id,
+              user_id: user.id
+            }
+
+            const ifProductExistInCart = await cart.findSingle(condition);
+
+            if (ifProductExistInCart) {
+              const toUpdate = { quantity: data.quantity, is_deleted: data.is_deleted };
+              const updateBool = await cart.update(toUpdate, condition);
+              actionStatus = true; dataDy = null; msgDy = MSG.CART_UPDATED;
+            } else {
+              const tableFields = {
+                user_id: user.id,
+                product_id: data.product_id,
+                product_varient_id: data.product_varient_id,
+                quantity: data.quantity,
+                is_deleted: false
+              }
+              const createBool = await cart.create(tableFields);
+              actionStatus = true; dataDy = null; msgDy = MSG.CART_UPDATED;
+            }
+
           }
 
 
-
         } else {
-
-          actionStatus = false; msgDy = messages.PRODUCT_NOT_EXIST;
+          actionStatus = false; dataDy = null; msgDy = MSG.PRODUCT_VARIENT_NOT_EXIST;
         }
-
-
-
-
-
       } else {
-        actionStatus = false; msgDy = messages.ACCOUNT_NOT_EXIST;
-      }
-
-      return new ResponseData({
-        status: 200,
-        success: actionStatus,
-        result: { data: null },
-        msg: msgDy,
-      });
-
-    } catch (error) {
-      console.log(messages.SOMETHING_WRONG, error);
-      return new ResponseData({
-        status: 200,
-        success: false,
-        result: { data: null },
-        msg: messages.SOMETHING_WRONG,
-      });
-    }
-  },
-
-  fetchCartItem: async (data) => {
-    try {
-      console.log('the data we get', data);
-
-      const condition = { user_id: data.user_id };
-      let msgDy;
-      let actionStatus;
-      let dataDy = null;
-      const ifExist = await cart.findSingle(condition);
-
-      if (ifExist) {
-        actionStatus = true;
-        dataDy = ifExist;
-        msgDy = "available items in cart";
-      } else {
-        actionStatus = true;
-        dataDy = null;
-        msgDy = "Your cart is empity";
+        actionStatus = false; dataDy = null; msgDy = MSG.PRODUCT_NOT_EXIST;
       }
 
       return new ResponseData({
@@ -97,12 +71,40 @@ module.exports = {
       });
 
     } catch (error) {
-      console.log(messages.SOMETHING_WRONG, error);
+      console.log(MSG.SOMETHING_WRONG, error);
       return new ResponseData({
         status: 200,
         success: false,
         result: { data: null },
-        msg: messages.SOMETHING_WRONG,
+        msg: MSG.SOMETHING_WRONG,
+      });
+    }
+  },
+
+  fetchCartItem: async (data) => {
+    try {
+      console.log('the data we get', data);
+
+      let msgDy, actionStatus, dataDy = null;
+      const condition = { user_id: data.id };
+      const ifExist = await cart.getCartItemWithProduct(condition);
+
+      actionStatus = true; dataDy = ifExist; msgDy = MSG.ITEMS_IN_CART;
+
+      return new ResponseData({
+        status: 200,
+        success: actionStatus,
+        result: { data: dataDy },
+        msg: msgDy,
+      });
+
+    } catch (error) {
+      console.log(MSG.SOMETHING_WRONG, error);
+      return new ResponseData({
+        status: 200,
+        success: false,
+        result: { data: null },
+        msg: MSG.SOMETHING_WRONG,
       });
     }
   },
@@ -127,12 +129,12 @@ module.exports = {
       });
 
     } catch (error) {
-      console.log(messages.SOMETHING_WRONG, error);
+      console.log(MSG.SOMETHING_WRONG, error);
       return new ResponseData({
         status: 200,
         success: false,
         result: { data: null },
-        msg: messages.SOMETHING_WRONG,
+        msg: MSG.SOMETHING_WRONG,
       });
     }
   },

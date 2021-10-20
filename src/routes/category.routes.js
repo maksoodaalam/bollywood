@@ -1,6 +1,6 @@
 const express = require('express');
 const categoryRouter = express.Router();
-const { addCategory, fetchCategory } = require('../controllers/category.controllers');
+const { addCategory, fetchCategory, getProduct } = require('../controllers/category.controllers');
 
 const validateResourceMW = require('../middlewares/users.middlewares');
 const paramsValidations = require('../middlewares/users.middlewares.params');

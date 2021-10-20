@@ -13,9 +13,7 @@ module.exports = {
       // console.log('the data we get', data);
 
       const condition = { email: data.email };
-      let msgDy;
-      let actionStatus;
-      let dataDy;
+      let msgDy, actionStatus, dataDy;
       const emailExist = await users.findSingle(condition);
       if (emailExist) {
         // console.log('EmailExist', emailExist.password);
@@ -35,14 +33,10 @@ module.exports = {
           dataDy = { userData: emailExist, token: token };
           msgDy = messages.LOGGED_IN.replace('%type%', emailExist.name);
         } else {
-          actionStatus = false;
-          dataDy = null;
-          msgDy = messages.WRONG_CREDENTIALS;
+          actionStatus = false; dataDy = null; msgDy = messages.WRONG_CREDENTIALS;
         }
       } else {
-        actionStatus = false;
-        dataDy = null;
-        msgDy = messages.WRONG_CREDENTIALS;
+        actionStatus = false; dataDy = null; msgDy = messages.WRONG_CREDENTIALS;
       }
 
       return new ResponseData({
@@ -248,7 +242,7 @@ module.exports = {
     try {
       let condition, msg, actionStatus;
       condition = { id: user.id };
-      
+
       const updateBool = await users.update({ name: updateData.name }, condition);
 
       actionStatus = true; msg = messages.UPDATED_ACCOUNT;

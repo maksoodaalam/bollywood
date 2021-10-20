@@ -1,14 +1,16 @@
 const category = require('../dbServices/category.db.services');
 const ResponseData = require('../helper/responseData');
 const msg = require('../helper/messages.json');
+const Helper = require('../helper/helper');
+
 
 module.exports = {
 
+
   addToCategory: async (data) => {
     try {
-      let msgDy;
-      let actionStatus;
-      
+      let msgDy, actionStatus;
+
       const condition = { name: data.name };
 
       const ifExist = await category.findSingle(condition);
@@ -24,12 +26,14 @@ module.exports = {
           if (ifExist) {
             actionStatus = true; msgDy = msg.CATEGORY_CREATED;
             await category.create(data);
+
           } else {
             actionStatus = false; msgDy = msg.PARENT_CAT_NOT_EXIST;
           }
         } else {
           actionStatus = true; msgDy = msg.CATEGORY_CREATED;
           await category.create(data);
+
         }
       }
 

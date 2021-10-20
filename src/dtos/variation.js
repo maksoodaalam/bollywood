@@ -8,9 +8,9 @@ module.exports = {
 
   addVariation: yup.object({
     name: yup.string().required(),
-    attribute_id: yup.number().required().positive().integer(),
-    createdBy: yup.number().positive().integer(),
-    modifiedBy: yup.number().positive().integer(),
+    attribute_id: yup.number().required().positive(),
+    createdBy: yup.number().positive(),
+    modifiedBy: yup.number().positive(),
     status: yup.boolean(),
     is_deleted: yup.boolean(),
   }),

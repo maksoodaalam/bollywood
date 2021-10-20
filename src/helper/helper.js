@@ -7,7 +7,24 @@ const util = require('util');
 const Pagination = require('../helper/Pagination');
 const saltRound = 10;
 const tokenSecret = 'secret123';
+const fs = require('fs-extra');
+const multer = require('multer');
 //const Razorpay = require('razorpay');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const path = `../bridge`;
+    fs.mkdirSync(path, { recursive: true });
+    cb(null, path);
+  },
+  filename: (req, file, cb) => {
+    let file_name = file.originalname;
+    file_name = file_name.replace(/\s/g, "-");
+    cb(null, file.fieldname + '-' + file_name);
+  }
+});
+
+const upload = multer({ storage });
 
 module.exports = {
   generatePasswordHash: async (password = '') => {
@@ -58,5 +75,69 @@ module.exports = {
     } else {
       return genNumber;
     }
+  },
+
+  uploadSingle: async (req, res, next) => {
+
+    upload.single("image"),
+      function (req, res, next) {
+        try {
+          const image = req.file.originalname;
+          const oldName = `../bridge/image-${image}`;
+          const extension = image.split('.').pop();
+          const name = `${Date.now()}.${extension}`;
+          const newName = `../bridge/${name}`;
+          fs.rename(oldName, newName, (error) => {
+            if (error) {
+              console.log('something went wrong while changing filename', error);
+
+              return new ResponseData({
+                status: 400,
+                success: false,
+                result: { data: null },
+                msg: MSG.RENAME_FILE_ERROR,
+              });
+
+            }
+            else {
+              console.log('File Renamed');
+
+
+              const oldPath = newName;
+              const newPath = `../uploads/${name}`;
+              fs.move(oldPath, newPath, function (error) {
+                if (error) {
+                  console.error('error in moving file', error);
+
+
+                  return new ResponseData({
+                    status: 400,
+                    success: false,
+                    result: { data: null },
+                    msg: MSG.MOVE_ERROR,
+                  });
+
+                } else {
+                  console.error('moved success');
+                }
+              });
+
+
+            }
+          });
+          next();
+        } catch (error) {
+          console.log('something went wrong while uploading file ', error);
+
+          return new ResponseData({
+            status: 400,
+            success: false,
+            result: { data: null },
+            msg: MSG.UPLOAD_FILE_ERROR,
+          });
+
+        }
+      }
+
   }
 }
