@@ -39,6 +39,45 @@ module.exports = {
       ]
     })
   },
+  getProductById: async (id) => {
+    console.log(id);
+   return await products.findOne({
+     where: id,
+     include: [
+       {
+         model: gallery,
+         required: false
+       },
+       {
+        model: product_details,
+        required: false
+       }
+     ]
+   })
+  },
+
+  getProductByCatagoryId: async (id) => {
+    
+    // try {
+      // console.log(id);
+      // var ids = [id]
+      return await products.findAll({
+        where: {
+          categoryId: {  
+            [Op.in]: [3,4]
+          }
+        },
+         include: [
+          {
+            model: gallery,
+            required: false
+          },
+          {
+           model: product_details,
+           required: false
+          } ]
+       
+    })
 
   getProductFilter: async (condition = {}) => {
 

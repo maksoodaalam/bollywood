@@ -10,7 +10,8 @@ module.exports = {
 
   addProduct: async (data) => {
     try {
-      let msgDy, actionStatus;
+      let msgDy;
+      let actionStatus;
 
       const ifExist = await product.findSingle({ productname: data.productname });
 
@@ -70,10 +71,6 @@ module.exports = {
 
           actionStatus = true; msgDy = MSG.PRODUCT_CREATED;
 
-
-
-
-
         } else {
           actionStatus = false; msgDy = MSG.CATEGORY_NOT_EXIST_WITH_ID;
 
@@ -125,9 +122,78 @@ module.exports = {
     }
   },
 
+  getProductById: async(id) =>{
+    try {
+      const productByID = await product.getProductById(id);
+
+      return new ResponseData({
+        status: 200,
+        success: true,
+        result: { data: productByID },
+        msg: MSG.PRODUCT_FETCHED_BY_ID,
+      });
+
+    }catch (error) {
+      console.log(MSG.SOMETHING_WRONG, error);
+      return new ResponseData({
+        status: 200,
+        success: false,
+        result: { data: null },
+        msg: MSG.SOMETHING_WRONG,
+      });
+    }
+  },
+
+  getProductByCatagoryId: async (id) => {
+    console.log('catagory id ===>', id);
+    try {
+      const productByCatagoryID = await product.getProductByCatagoryId(id);
+
+      return new ResponseData({
+        status: 200,
+        success: true,
+        result: { data: productByCatagoryID },
+        msg: MSG.PRODUCT_FETCHED_BY_ID,
+      });
+
+    }catch (error) {
+      console.log(MSG.SOMETHING_WRONG, error);
+      return new ResponseData({
+        status: 200,
+        success: false,
+        result: { data: null },
+        msg: MSG.SOMETHING_WRONG,
+      });
+    }
+  },
+
+  getProductByPriceRange: async (priceFrom, priceTo) => {
+    console.log('catagory id ===>', priceFrom, priceTo);
+    try {
+      const productByCatagoryID = await product.getProductByPriceRange(priceFrom, priceTo);
+
+      return new ResponseData({
+        status: 200,
+        success: true,
+        result: { data: productByCatagoryID },
+        msg: MSG.PRODUCT_FETCHED_BY_ID,
+      });
+
+    }catch (error) {
+      console.log(MSG.SOMETHING_WRONG, error);
+      return new ResponseData({
+        status: 200,
+        success: false,
+        result: { data: null },
+        msg: MSG.SOMETHING_WRONG,
+      });
+    }
+  },
+
   addProductDetail: async (data) => {
     try {
-      let msgDy, actionStatus;
+      let msgDy;
+      let actionStatus;
 
       const ifExist = await product.findSingle({ id: data.product_id });
 
@@ -172,6 +238,7 @@ module.exports = {
       });
     }
   },
+  
 
   getProductFilter: async (catagoryId) => {
     try {
